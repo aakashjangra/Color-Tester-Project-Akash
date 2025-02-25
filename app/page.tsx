@@ -29,26 +29,25 @@ export default function Home() {
 
   const analyzeImage = async () => {
     try {
-      //upload on cloudinary
-      const cloudinaryImageUrl = await cloudinary.uploader.upload(
-        selectedImage,
-        {
-          resource_type: "auto",
-        }
-      );
+      const formData = new FormData();
+      formData.append("image", selectedImage as string);
 
-      console.log("cloud url is - ", cloudinaryImageUrl);
+      const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/analyze-image`;
 
-      // if uploaded, call api
-      fetch("/api/analyze-image", {
-        method: "POST",
-        body: JSON.stringify({ ImageUrl: cloudinaryImageUrl }),
-        // Note: Don't set Content-Type header when using FormData
-        // The browser will set it automatically with the boundary
-      })
-        .then((res) => res.json())
-        .then((data) => setAnalysisReport(data))
-        .catch((e) => console.error(e));
+      console.log('apiUrl- ', apiUrl);
+      
+      // fetch(apiUrl, {
+      //   method: "POST",
+      //   body: formData
+      //   // Note: Don't set Content-Type header when using FormData
+      //   // The browser will set it automatically with the boundary
+      // })
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     console.log('what we got from BE- ', data);
+      //     setAnalysisReport(data);
+      //   })
+      //   .catch((e) => console.error(e));
     } catch (e) {
       console.error(e);
     }
